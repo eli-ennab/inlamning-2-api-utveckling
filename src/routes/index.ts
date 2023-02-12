@@ -1,6 +1,7 @@
 import { createUserRules } from "../validations/user_rules"
 import express from "express"
 import { login, register } from "../controllers/user_controller"
+import profile from "./profile"
 
 const router = express.Router()
 
@@ -12,6 +13,11 @@ router.get('/', (req, res) => {
 		message: "WELCOME",
 	})
 })
+
+/**
+ * GET /profile
+ */
+router.use('/profile', profile)
 
 /**
  * POST /register
