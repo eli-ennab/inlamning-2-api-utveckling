@@ -4,7 +4,15 @@
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
-import prisma from '../prisma'
+import { createUser, getUserByEmail } from '../routes/user'
+// import { JwtPayload } from '../types'
+
+/**
+ * Login a user
+ */
+export const login = async (req: Request, res: Response) => {
+
+}
 
 /**
  * Register a new user
@@ -26,14 +34,12 @@ export const register = async (req: Request, res: Response) => {
 		console.log("Hashed password:", hashedPassword)
 
     try {   
-        const user = await prisma.user.create({
-            data: {
-                email: validatedData.email,
-                password: validatedData.password,
-                first_name: validatedData.first_name,
-                last_name: validatedData.last_name,
-            },
-        })
+		const user = await createUser({
+			email: validatedData.email,
+			password: validatedData.password,
+            first_name: validatedData.first_name,
+            last_name: validatedData.last_name,
+		})
 
         res.status(201).send({ 
             status: "success", data: user

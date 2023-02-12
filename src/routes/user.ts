@@ -1,6 +1,7 @@
 /**
  * User
  */
+import { CreateUserData } from '../types'
 import prisma from '../prisma'
 
 /**
@@ -11,5 +12,14 @@ export const getUserByEmail = async (email: string) => {
 		where: {
 			email: email,
 		}
+	})
+}
+
+/**
+ * Create a user
+ */
+export const createUser = async (data: CreateUserData) => {
+	return await prisma.user.create({
+		data: data,
 	})
 }
