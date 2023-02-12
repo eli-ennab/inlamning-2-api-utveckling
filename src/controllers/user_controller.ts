@@ -2,11 +2,14 @@
  * User controller
  */
 import bcrypt from 'bcrypt'
+import Debug from 'debug'
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
 import { createUser, getUserByEmail } from '../routes/user'
 import { JwtPayload } from '../types'
 import jwt from 'jsonwebtoken'
+
+const debug = Debug('prisma-albums:user_controller')
 
 /**
  * Login a user
