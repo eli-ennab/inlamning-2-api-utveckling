@@ -4,7 +4,7 @@
 import { body } from 'express-validator'
 import { getUserByEmail } from '../routes/user'
 
-export const createRegistrationRules = [
+export const createUserRules = [
 	body('email').isEmail().custom(async value => {
 		const user = await getUserByEmail(value)
 

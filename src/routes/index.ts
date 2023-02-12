@@ -1,6 +1,6 @@
-import { createRegistrationRules } from "../validations/registration_rules"
+import { createUserRules } from "../validations/user_rules"
 import express from "express"
-import { register } from "../controllers/register_controller"
+import { login, register } from "../controllers/user_controller"
 
 const router = express.Router()
 
@@ -17,6 +17,11 @@ router.get('/', (req, res) => {
  * POST /register
  * @param register Register a new user
  */
-router.post('/register', createRegistrationRules, register)
+router.post('/register', createUserRules, register)
+
+/**
+ * POST /login
+ */
+router.post('/login', login)
 
 export default router
