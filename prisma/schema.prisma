@@ -13,12 +13,16 @@ model User {
   password    String
   first_name  String
   last_name   String
+  albums      Album[]
+  photos      Photo[]
 }
 
 model Album {
 	id					Int				@id @default(autoincrement()) @db.UnsignedInt
   title       String
   photos      Photo[]
+  user        User    		@relation(fields: [user_id], references: [id])
+  user_id     Int         @db.UnsignedInt
 }
 
 model Photo {
@@ -27,4 +31,6 @@ model Photo {
   url         String
   comment     String?   @default("null")
   albums      Album[]
+  user        User    		@relation(fields: [user_id], references: [id])
+  user_id     Int         @db.UnsignedInt
 }
