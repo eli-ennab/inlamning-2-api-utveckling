@@ -1,5 +1,5 @@
 /**
- * User
+ * User services
  */
 import { CreateUserData } from '../types'
 import prisma from '../prisma'

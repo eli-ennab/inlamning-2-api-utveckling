@@ -2,7 +2,7 @@
  * Validation rules for User
  */
 import { body } from 'express-validator'
-import { getUserByEmail } from '../routes/user'
+import { getUserByEmail } from '../services/user_services'
 
 export const createUserRules = [
 	body('email').isEmail().custom(async value => {

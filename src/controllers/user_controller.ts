@@ -4,10 +4,9 @@
 import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
-import { createUser, getUserByEmail } from '../routes/user'
+import { createUser, getUserByEmail } from '../services/user_services'
 import { JwtPayload } from '../types'
 import jwt from 'jsonwebtoken'
-
 
 /**
  * Login a user
