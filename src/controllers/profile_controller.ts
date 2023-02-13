@@ -10,6 +10,9 @@ import prisma from '../prisma'
 export const getProfile = async (req: Request, res: Response) => {
 	res.send({
 		status: "success",
-		data: null,
+		data: {
+			id: req.user.id,
+			email: req.user.email
+		}
 	})
 }
