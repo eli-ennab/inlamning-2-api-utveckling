@@ -16,6 +16,7 @@ router.get('/', (req, res) => {
 
 /**
  * GET /profile
+ * @param profile Get the authenticated user's profile
  */
 router.use('/profile', profile)
 
@@ -27,6 +28,7 @@ router.post('/register', createUserRules, register)
 
 /**
  * POST /login
+ * @param login Login user
  */
 router.post('/login', login)
 
