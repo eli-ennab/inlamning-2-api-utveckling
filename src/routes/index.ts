@@ -2,6 +2,8 @@ import { createUserRules } from "../validations/user_rules"
 import express from "express"
 import { login, refresh, register } from "../controllers/user_controller"
 import profile from "./profile"
+import albums from './albums'
+import photos from './photos'
 // import { basicAuth } from "../middlewares/auth/basic"
 import { jwtAuth } from "../middlewares/auth/jwt"
 const router = express.Router()
@@ -14,6 +16,16 @@ router.get('/', (req, res) => {
 		message: "WELCOME",
 	})
 })
+
+/**
+ * /albums
+ */
+router.use('/albums', albums)
+
+/**
+ * /photos
+ */
+router.use('/photos', photos)
 
 /**
  * GET /profile
