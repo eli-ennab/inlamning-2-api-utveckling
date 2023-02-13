@@ -1,6 +1,6 @@
 import { createUserRules } from "../validations/user_rules"
 import express from "express"
-import { login, register } from "../controllers/user_controller"
+import { login, refresh, register } from "../controllers/user_controller"
 import profile from "./profile"
 // import { basicAuth } from "../middlewares/auth/basic"
 import { jwtAuth } from "../middlewares/auth/jwt"
@@ -32,5 +32,10 @@ router.post('/register', createUserRules, register)
  * @param login Login user
  */
 router.post('/login', login)
+
+/**
+ * POST /refresh
+ */
+router.post('/refresh', refresh)
 
 export default router
