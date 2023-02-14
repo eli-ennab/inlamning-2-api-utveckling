@@ -1,6 +1,7 @@
 /**
  * HTTP Basic Auth
  */
+/*
 import bcrypt from 'bcrypt'
 import { Request, Response, NextFunction } from "express"
 import { getUserByEmail } from "../../services/user_services"
@@ -49,3 +50,4 @@ export const basicAuth = async (req: Request, res: Response, next: NextFunction)
 
     next()
 }
+*/
