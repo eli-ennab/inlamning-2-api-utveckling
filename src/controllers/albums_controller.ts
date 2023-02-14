@@ -1,10 +1,13 @@
 /**
  * Albums controller
  */
+import Debug from 'debug'
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
 import prisma from '../prisma'
 import { createAlbum } from '../services/album_services'
+
+const debug = Debug('albums:albums_controller')
 
 /**
  * Get all albums
@@ -66,6 +69,7 @@ export const store = async (req: Request, res: Response) => {
 			data: album,
 		})
 	} catch (err) {
+		debug("All I got was this lousy: %o", err)
 		res.status(500).send({ status: "error", message: "Cannot create album" })
 	}
 }
