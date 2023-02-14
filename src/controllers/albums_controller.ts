@@ -52,12 +52,14 @@ export const store = async (req: Request, res: Response) => {
 			data: validatonErrors.array(),
 		})
 	}
+
+	const validatedData = matchedData(req)
+
 	try {
-		const album = await prisma.album.create({
-			data: {
-                title: req.body.title,
-				user_id: req.token.sub,
-			}
+		const album = await createAlbum({
+			title: validatedData.title,
+			user_id: req.user.sub,
+			// id: req.body.id,
 		})
 		res.send({
 			status: "success",
