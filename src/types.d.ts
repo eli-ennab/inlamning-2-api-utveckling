@@ -10,9 +10,8 @@ export type CreateUserData = {
 }
 
 export type CreateAlbumData = {
-	// id: number,
 	title: string,
-	user_id: number
+	user_id: number,
 }
 
 export type JwtPayload = {

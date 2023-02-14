@@ -4,7 +4,7 @@
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
 import prisma from '../prisma'
-import { createAlbum } from '../services/album_service'
+import { createAlbum } from '../services/album_services'
 
 /**
  * Get all albums
@@ -52,13 +52,12 @@ export const store = async (req: Request, res: Response) => {
 			data: validatonErrors.array(),
 		})
 	}
-
-	const validatedData = matchedData(req)
-
 	try {
-		const album = await createAlbum({
-			title: validatedData.title,
-			user_id: req.user.sub,
+		const album = await prisma.album.create({
+			data: {
+                title: req.body.title,
+				user_id: req.token.sub,
+			}
 		})
 		res.send({
 			status: "success",
