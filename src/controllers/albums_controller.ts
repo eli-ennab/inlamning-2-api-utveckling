@@ -2,8 +2,9 @@
  * Albums controller
  */
 import { Request, Response } from 'express'
-import { validationResult } from 'express-validator'
+import { matchedData, validationResult } from 'express-validator'
 import prisma from '../prisma'
+import { createAlbum } from '../services/album_service'
 
 /**
  * Get all albums
@@ -51,11 +52,13 @@ export const store = async (req: Request, res: Response) => {
 			data: validatonErrors.array(),
 		})
 	}
+
+	const validatedData = matchedData(req)
+
 	try {
-		const album = await prisma.album.create({
-			data: {
-                title: req.body.title,
-			}
+		const album = await createAlbum({
+			title: validatedData.title,
+			user_id: req.user.sub,
 		})
 		res.send({
 			status: "success",
