@@ -5,7 +5,7 @@ import Debug from 'debug'
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import prisma from '../prisma'
-import { createAlbum } from '../services/album_services'
+import { createAlbum, updateAlbum } from '../services/album_services'
 
 const debug = Debug('albums:album_controller')
 
@@ -73,5 +73,32 @@ export const store = async (req: Request, res: Response) => {
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
 		res.status(500).send({ status: "error", message: "Cannot create album" })
+	}
+}
+
+/**
+ * Update an album
+ */
+export const update = async (req: Request, res: Response) => {
+	const albumId = Number(req.params.albumId)
+
+	debug("All I sent was this lousy: %o", albumId)
+
+	try {
+	const updateAlbum = await prisma.album.update({
+		where: {
+		  id: albumId,
+		},
+		data: {
+		  title: req.body.title,
+		},
+	  })
+	  res.send({
+		status: "success",
+		data: updateAlbum,
+	})
+	} catch (err) {
+		debug("All I got was this lousy: %o", err)
+		res.status(500).send({ status: "error", message: "Cannot update album" })
 	}
 }

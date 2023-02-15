@@ -3,7 +3,7 @@
  */
 import express from 'express'
 import { body } from 'express-validator'
-import { index, show, store } from '../controllers/album_controller'
+import { index, show, store, update } from '../controllers/album_controller'
 const router = express.Router()
 
 /**
@@ -30,11 +30,11 @@ router.post('/', [
 	body('title').isString().withMessage('has to be a string').bail().isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
 ], store)
 
-// /**
-//  * PATCH /albums/:albumId
-//  * Update an album
-//  */
-// router.patch('/:albumId', [], update)
+/**
+ * PATCH /albums/:albumId
+ * Update an album
+ */
+router.patch('/:albumId', [], update)
 
 // /**
 //  * POST /albums/:albumId/photos
