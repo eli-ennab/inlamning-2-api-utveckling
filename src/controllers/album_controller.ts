@@ -5,7 +5,7 @@ import Debug from 'debug'
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import prisma from '../prisma'
-import { createAlbum, updateAlbum } from '../services/album_services'
+import { createAlbum } from '../services/album_services'
 
 const debug = Debug('albums:album_controller')
 
