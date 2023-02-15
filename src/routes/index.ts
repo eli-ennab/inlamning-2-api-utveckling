@@ -25,7 +25,7 @@ router.use('/albums', jwtAuth, albums)
 /**
  * /photos
  */
-router.use('/photos', photos)
+router.use('/photos', jwtAuth, photos)
 
 /**
  * GET /profile

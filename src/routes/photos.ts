@@ -3,7 +3,7 @@
  */
 import express from 'express'
 import { body } from 'express-validator'
-import { index, show, store, update, destroy } from '../controllers/_controller'
+import { index, show, store } from '../controllers/photo_controller'
 const router = express.Router()
 
 /**
@@ -26,13 +26,17 @@ router.get('/:photoId', show)
  * POST /photos
  * Create a new photo
  */
-router.post('/', [], store)
+router.post('/', [
+	body('title').isString().withMessage('has to be a string').bail().isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
+    body('url').isString().withMessage('has to be a string'),
+    body('comment').optional().isString().withMessage('has to be a string').bail().isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
+], store)
 
 /**
  * PATCH /photos/:photoId
  * Update a photo
  */
-router.patch('/:photoId', [], update)
+// router.patch('/:photoId', [], update)
 
 /**
  * VG
@@ -42,5 +46,6 @@ router.patch('/:photoId', [], update)
  * DELETE /photos/:photoId
  * Delete a photo
  */
-router.delete('/:photoId', destroy)
+// router.delete('/:photoId', destroy)
+
 export default router
