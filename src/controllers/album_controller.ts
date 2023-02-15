@@ -38,13 +38,18 @@ export const show = async (req: Request, res: Response) => {
 			where: {
 			  id: albumId,
 			  user_id: req.user.sub
+			},
+			include: {
+				photos: true,
 			}
 		  })
 		res.send({
 			status: "success",
 			data: album,
 		})
+		debug("Result", album)
 	} catch (err) {
+		debug("Error", err)
 		return res.status(404).send({ status: "error", message: "Not found" })
 	}
 }
@@ -91,7 +96,7 @@ export const update = async (req: Request, res: Response) => {
 		},
 		data: {
 		  title: req.body.title,
-		},
+		}
 	  })
 	  res.send({
 		status: "success",
@@ -102,3 +107,32 @@ export const update = async (req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Cannot update album" })
 	}
 }
+
+/**
+ * Add a photo to album
+ */
+export const addPhoto = async (req: Request, res: Response) => {
+	try {
+		const result = await prisma.album.update({
+			where: {
+				id: Number(req.params.albumId),
+			},
+			data: {
+				photos: {
+					connect: {
+						id: req.body.photoId,
+					}
+				}
+			},
+			include: {
+				photos: true,
+			}
+		})
+
+		res.send(result)
+	} catch (err) {
+		debug("Error thrown when adding photo %o to an album %o: %o", req.params.albumId, err)
+		res.status(500).send({ message: "Something went wrong" })
+	}
+}
+

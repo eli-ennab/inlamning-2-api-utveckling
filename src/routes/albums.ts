@@ -3,8 +3,13 @@
  */
 import express from 'express'
 import { body } from 'express-validator'
-import { index, show, store, update } from '../controllers/album_controller'
+import { Request, Response } from 'express'
+import prisma from '../prisma'
+import { index, show, store, update, addPhoto } from '../controllers/album_controller'
 const router = express.Router()
+import Debug from 'debug'
+
+const debug = Debug('albums:albums')
 
 /**
  * G
@@ -36,11 +41,12 @@ router.post('/', [
  */
 router.patch('/:albumId', [], update)
 
-// /**
-//  * POST /albums/:albumId/photos
-//  * Add a photo to an album
-//  */
-// router.post('/:albumId/photos', [], store)
+/**
+ * POST /albums/:albumId/photos
+ * Add a photo to an album
+ */
+// router.post('/:albumId/photos', [], addPhoto)
+router.post('/:albumId/photos', addPhoto)
 
 /**
  * VG
