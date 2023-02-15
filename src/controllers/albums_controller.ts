@@ -56,13 +56,10 @@ export const store = async (req: Request, res: Response) => {
 		})
 	}
 
-	const validatedData = matchedData(req)
-
 	try {
 		const album = await createAlbum({
-			title: validatedData.title,
+			title: req.body.title,
 			user_id: req.user.sub,
-			// id: req.body.id,
 		})
 		res.send({
 			status: "success",

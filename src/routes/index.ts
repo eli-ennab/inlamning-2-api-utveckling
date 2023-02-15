@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 /**
  * /albums
  */
-router.use('/albums', albums)
+router.use('/albums', jwtAuth, albums)
 
 /**
  * /photos
