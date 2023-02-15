@@ -3,7 +3,7 @@
  */
 import express from 'express'
 import { body } from 'express-validator'
-import { index, show, store } from '../controllers/photo_controller'
+import { index, show, store, update} from '../controllers/photo_controller'
 const router = express.Router()
 
 /**
@@ -36,7 +36,7 @@ router.post('/', [
  * PATCH /photos/:photoId
  * Update a photo
  */
-// router.patch('/:photoId', [], update)
+router.patch('/:photoId', [], update)
 
 /**
  * VG

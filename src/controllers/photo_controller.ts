@@ -77,3 +77,32 @@ export const store = async (req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Cannot create photo" })
 	}
 }
+
+/**
+ * Update a photo
+ */
+export const update = async (req: Request, res: Response) => {
+	const photoId = Number(req.params.photoId)
+
+	debug("All I sent was this lousy: %o", photoId)
+
+	try {
+	const updatePhoto = await prisma.photo.update({
+		where: {
+		  id: photoId,
+		},
+		data: {
+			title: req.body.title,
+			url: req.body.url,
+			comment: req.body?.comment,
+		}
+	  })
+	  res.send({
+		status: "success",
+		data: updatePhoto,
+	})
+	} catch (err) {
+		debug("All I got was this lousy: %o", err)
+		res.status(500).send({ status: "error", message: "Cannot update photo" })
+	}
+}
