@@ -3,18 +3,22 @@
  */
 import Debug from 'debug'
 import { Request, Response } from 'express'
-import { matchedData, validationResult } from 'express-validator'
+import { validationResult } from 'express-validator'
 import prisma from '../prisma'
 import { createAlbum } from '../services/album_services'
 
-const debug = Debug('albums:albums_controller')
+const debug = Debug('albums:album_controller')
 
 /**
  * Get all albums
  */
 export const index = async (req: Request, res: Response) => {
 	try {
-		const albums = await prisma.album.findMany()
+		const albums = await prisma.album.findMany({
+			where: {
+				user_id: req.user.sub
+			  }
+		})
 		res.send({
 			status: "success",
 			data: albums,
@@ -30,11 +34,12 @@ export const index = async (req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
 	const albumId = Number(req.params.albumId)
 	try {
-		const album = await prisma.album.findUniqueOrThrow({
+		const album = await prisma.album.findFirst({
 			where: {
-				id: albumId,
-			},
-		})
+			  id: albumId,
+			  user_id: req.user.sub
+			}
+		  })
 		res.send({
 			status: "success",
 			data: album,

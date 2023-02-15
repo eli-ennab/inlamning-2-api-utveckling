@@ -26,7 +26,7 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
 	}
 
     try {
-		const payload = (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "") as unknown) as JwtPayload
+		const payload = (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "4h") as unknown) as JwtPayload
 
 		req.user = payload
 
