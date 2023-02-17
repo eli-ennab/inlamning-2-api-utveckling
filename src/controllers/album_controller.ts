@@ -136,3 +136,23 @@ export const addPhoto = async (req: Request, res: Response) => {
 	}
 }
 
+/**
+ * Delete an album (and the links to the album's photos, but not the photos themselves)
+ */
+export const deleteAlbum = async (req: Request, res: Response) => {
+	try {
+		const deletedAlbum = await prisma.album.delete({
+			where: {
+				id: Number(req.params.albumId),
+			},
+			include: {
+				photos: true,
+			},
+		});
+
+		res.send(deletedAlbum);
+	} catch (err) {
+		debug("Error thrown when deleting album %o and the links to the photos: %o", req.params.albumId, err);
+		res.status(500).send({ message: "Something went wrong" });
+	}
+};
