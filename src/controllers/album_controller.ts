@@ -133,10 +133,62 @@ export const update = async (req: Request, res: Response) => {
 	}
 }
 
+// /**
+//  * Add a photo to album
+//  */
+// export const addPhoto = async (req: Request, res: Response) => {
+
+// 	const validatonErrors = validationResult(req)
+// 	if(!validatonErrors.isEmpty()) {
+// 		return res.status(400).send({
+// 			status: "fail",
+// 			data: validatonErrors.array(),
+// 		})
+// 	}
+
+// 	try {
+// 		const album = await prisma.album.findFirstOrThrow({
+// 			where: {
+// 				id: Number(req.params.albumId),
+// 				user_id: req.user.sub
+// 			  }
+// 		})
+
+// 	} catch (err) {
+// 		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+// 	}
+	
+// 	try {
+// 		const result = await prisma.album.update({
+// 			where: {
+// 				id: Number(req.params.albumId),
+// 			},
+// 			data: {
+// 				photos: {
+// 					connect: {
+// 						id: req.body.photo_id,
+// 					}
+// 				}
+// 			},
+// 			include: {
+// 				photos: true,
+// 			}
+// 		})
+
+// 		res.status(200).send({
+// 			"status": "success",
+// 			"data": null
+// 		  })
+// 	} catch (err) {
+// 		debug("Error thrown when adding photo %o to an album %o: %o", req.params.albumId, err)
+// 		res.status(500).send({ message: "Something went wrong" })
+// 	}
+// }
+
 /**
- * Add a photo to album
+ * Add photos to album
  */
-export const addPhoto = async (req: Request, res: Response) => {
+export const addPhotos = async (req: Request, res: Response) => {
 
 	const validatonErrors = validationResult(req)
 	if(!validatonErrors.isEmpty()) {
@@ -159,16 +211,16 @@ export const addPhoto = async (req: Request, res: Response) => {
 	}
 	
 	try {
+		const photoIds = req.body.photo_ids
+
 		const result = await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
 			data: {
 				photos: {
-					connect: {
-						id: req.body.photo_id,
-					}
-				}
+					connect: photoIds.map((id: Number) => ({ id })),
+				},
 			},
 			include: {
 				photos: true,
@@ -180,7 +232,7 @@ export const addPhoto = async (req: Request, res: Response) => {
 			"data": null
 		  })
 	} catch (err) {
-		debug("Error thrown when adding photo %o to an album %o: %o", req.params.albumId, err)
+		debug("Error thrown when adding photos %o to an album %o: %o", req.params.albumId, err)
 		res.status(500).send({ message: "Something went wrong" })
 	}
 }

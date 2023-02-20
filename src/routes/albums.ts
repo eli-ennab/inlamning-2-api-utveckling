@@ -5,7 +5,7 @@ import express from 'express'
 import { body } from 'express-validator'
 import { Request, Response } from 'express'
 import prisma from '../prisma'
-import { index, show, store, update, addPhoto, deleteAlbum } from '../controllers/album_controller'
+import { index, show, store, update, addPhotos, deleteAlbum } from '../controllers/album_controller'
 const router = express.Router()
 import Debug from 'debug'
 import { createAlbumRules, updateAlbumRules } from '../validations/album_rules'
@@ -40,21 +40,21 @@ router.post('/', createAlbumRules, store)
  */
 router.patch('/:albumId', createAlbumRules, update)
 
-/**
- * POST /albums/:albumId/photos
- * Add a photo to an album
- */
-router.post('/:albumId/photos', addPhoto)
+// /**
+//  * POST /albums/:albumId/photos
+//  * Add a photo to an album
+//  */
+// router.post('/:albumId/photos', addPhoto)
 
 /**
  * VG
  */
 
-// /**
-//  * POST /albums/:albumId/photos
-//  * Add multiple photos to an album
-//  */
-// router.post('/:albumId/photos', [], store)
+/**
+ * POST /albums/:albumId/photos
+ * Add multiple photos to an album
+ */
+router.post('/:albumId/photos', [], addPhotos)
 
 // /**
 //  * DELETE /albums/:albumId/photos/:photoId
