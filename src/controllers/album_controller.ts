@@ -188,7 +188,7 @@ export const update = async (req: Request, res: Response) => {
 /**
  * Add photos to album
  */
-export const addPhotos = async (req: Request, res: Response) => {
+export const addPhotosToAlbum = async (req: Request, res: Response) => {
 
 	const validatonErrors = validationResult(req)
 	if(!validatonErrors.isEmpty()) {
@@ -211,7 +211,7 @@ export const addPhotos = async (req: Request, res: Response) => {
 	}
 	
 	try {
-		const photoIds = req.body.photo_ids
+		const photoIds = req.body.photo_id
 
 		const result = await prisma.album.update({
 			where: {
@@ -233,6 +233,56 @@ export const addPhotos = async (req: Request, res: Response) => {
 		  })
 	} catch (err) {
 		debug("Error thrown when adding photos %o to an album %o: %o", req.params.albumId, err)
+		res.status(500).send({ message: "Something went wrong" })
+	}
+}
+
+/**
+ * Remove photo from album
+ */
+export const removePhotoFromAlbum = async (req: Request, res: Response) => {
+
+	const validatonErrors = validationResult(req)
+	if(!validatonErrors.isEmpty()) {
+		return res.status(400).send({
+			status: "fail",
+			data: validatonErrors.array(),
+		})
+	}
+
+	try {
+		const album = await prisma.album.findFirstOrThrow({
+			where: {
+				id: Number(req.params.albumId),
+				user_id: req.user.sub
+			  }
+		})
+
+	} catch (err) {
+		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+	}
+	
+	try {
+		const result = await prisma.album.update({		// delete!?
+			where: {
+				id: Number(req.params.albumId),
+			},
+			data: {
+				photos: {
+					disconnect: {
+						id: Number(req.params.photoId),
+					}
+				}
+			}
+		})
+
+		res.status(200).send({
+			"status": "success",
+			"data": null,
+		  })
+
+	} catch (err) {
+		debug("Error thrown when removing photo %o from album %o: %o", req.body.photoId, req.params.albumId, err)
 		res.status(500).send({ message: "Something went wrong" })
 	}
 }
