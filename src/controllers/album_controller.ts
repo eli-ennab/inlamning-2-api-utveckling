@@ -120,7 +120,7 @@ export const addPhoto = async (req: Request, res: Response) => {
 			data: {
 				photos: {
 					connect: {
-						id: req.body.photoId,
+						id: req.body.photo_id,
 					}
 				}
 			},
@@ -129,7 +129,10 @@ export const addPhoto = async (req: Request, res: Response) => {
 			}
 		})
 
-		res.send(result)
+		res.send({
+			"status": "success",
+			"data": null
+		  })
 	} catch (err) {
 		debug("Error thrown when adding photo %o to an album %o: %o", req.params.albumId, err)
 		res.status(500).send({ message: "Something went wrong" })
