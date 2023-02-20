@@ -2,9 +2,9 @@
  * Albums controller
  */
 import Debug from 'debug'
+import prisma from '../prisma'
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import prisma from '../prisma'
 import { createPhoto } from '../services/photo_services'
 
 const debug = Debug('albums:photo_controller')

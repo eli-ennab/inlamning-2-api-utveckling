@@ -2,9 +2,9 @@
  * Albums controller
  */
 import Debug from 'debug'
+import prisma from '../prisma'
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import prisma from '../prisma'
 import { createAlbum } from '../services/album_services'
 
 const debug = Debug('albums:album_controller')
@@ -132,58 +132,6 @@ export const update = async (req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Cannot update album" })
 	}
 }
-
-// /**
-//  * Add a photo to album
-//  */
-// export const addPhoto = async (req: Request, res: Response) => {
-
-// 	const validatonErrors = validationResult(req)
-// 	if(!validatonErrors.isEmpty()) {
-// 		return res.status(400).send({
-// 			status: "fail",
-// 			data: validatonErrors.array(),
-// 		})
-// 	}
-
-// 	try {
-// 		const album = await prisma.album.findFirstOrThrow({
-// 			where: {
-// 				id: Number(req.params.albumId),
-// 				user_id: req.user.sub
-// 			  }
-// 		})
-
-// 	} catch (err) {
-// 		return res.status(401).send({ status: "fail", message: "You are not authorized" })
-// 	}
-	
-// 	try {
-// 		const result = await prisma.album.update({
-// 			where: {
-// 				id: Number(req.params.albumId),
-// 			},
-// 			data: {
-// 				photos: {
-// 					connect: {
-// 						id: req.body.photo_id,
-// 					}
-// 				}
-// 			},
-// 			include: {
-// 				photos: true,
-// 			}
-// 		})
-
-// 		res.status(200).send({
-// 			"status": "success",
-// 			"data": null
-// 		  })
-// 	} catch (err) {
-// 		debug("Error thrown when adding photo %o to an album %o: %o", req.params.albumId, err)
-// 		res.status(500).send({ message: "Something went wrong" })
-// 	}
-// }
 
 /**
  * Add photos to album

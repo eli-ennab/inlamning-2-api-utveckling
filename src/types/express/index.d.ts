@@ -1,4 +1,3 @@
-import { User } from '@prisma/client'
 import { JwtPayload } from '../../types';
 
 declare global {

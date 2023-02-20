@@ -2,14 +2,9 @@
  * Photos router
  */
 import express from 'express'
-import { body } from 'express-validator'
 import { index, show, store, update, destroy} from '../controllers/photo_controller'
 import { createPhotoRules, updatePhotoRules } from '../validations/photo_rules'
 const router = express.Router()
-
-/**
- * G
- */
 
 /**
  * GET /photos
@@ -34,10 +29,6 @@ router.post('/', createPhotoRules, store)
  * Update a photo
  */
 router.patch('/:photoId', updatePhotoRules, update)
-
-/**
- * VG
- */
 
 /**
  * DELETE /photos/:photoId
