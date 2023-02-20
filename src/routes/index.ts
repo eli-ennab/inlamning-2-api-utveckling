@@ -1,10 +1,11 @@
-import { createUserRules } from "../validations/user_rules"
-import express from "express"
-import { login, refresh, register } from "../controllers/user_controller"
-import profile from "./profile"
 import albums from './albums'
+import express from "express"
+import profile from "./profile"
 import photos from './photos'
+import { login, refresh, register } from "../controllers/user_controller"
+import { createLoginRules, createUserRules } from "../validations/user_rules"
 import { jwtAuth } from "../middlewares/auth/jwt"
+
 const router = express.Router()
 
 /**
@@ -42,7 +43,7 @@ router.post('/register', createUserRules, register)
  * POST /login
  * @param login Login user
  */
-router.post('/login', login)
+router.post('/login', createLoginRules, login)
 
 /**
  * POST /refresh

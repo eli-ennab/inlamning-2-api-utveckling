@@ -3,8 +3,9 @@
  */
 import express from 'express'
 import { index, show, store, update, deleteAlbum, addPhotosToAlbum, removePhotoFromAlbum } from '../controllers/album_controller'
-const router = express.Router()
 import { addPhotosToAlbumRules, createAlbumRules, updateAlbumRules } from '../validations/album_rules'
+
+const router = express.Router()
 
 /**
  * GET /albums
