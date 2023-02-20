@@ -54,7 +54,7 @@ export const show = async (req: Request, res: Response) => {
 		debug("Result", album)
 	} catch (err) {
 		debug("Error", err)
-		return res.status(404).send({ status: "error", message: "Not found" })
+		return res.status(404).send({ status: "error", message: "You have no album with that ID." })
 	}
 }
 
@@ -211,7 +211,7 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 	}
 	
 	try {
-		const result = await prisma.album.update({		// delete!?
+		const result = await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
