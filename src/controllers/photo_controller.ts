@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photos,
 		})
@@ -34,13 +34,13 @@ export const index = async (req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
 	const photoId = Number(req.params.photoId)
 	try {
-		const photo = await prisma.photo.findFirst({
+		const photo = await prisma.photo.findFirstOrThrow({
 			where: {
 			  id: photoId,
 			  user_id: req.user.sub
 			}
 		  })
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photo,
 		})
@@ -68,7 +68,7 @@ export const store = async (req: Request, res: Response) => {
 			comment: req.body?.comment,
 			user_id: req.user.sub,
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photo,
 		})
@@ -97,7 +97,7 @@ export const update = async (req: Request, res: Response) => {
 			comment: req.body?.comment,
 		}
 	  })
-	  res.send({
+	  res.status(200).send({
 		status: "success",
 		data: updatePhoto,
 	})

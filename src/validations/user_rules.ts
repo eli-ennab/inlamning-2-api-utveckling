@@ -5,14 +5,14 @@ import { body } from 'express-validator'
 import { getUserByEmail } from '../services/user_services'
 
 export const createUserRules = [
-	body('email').isEmail().custom(async value => {
+	body('email').trim().isEmail().custom(async value => {
 		const user = await getUserByEmail(value)
 
 		if (user) {
 			return Promise.reject("Email already exists")
 		}
 	}),
-	body('password').isString().bail().isLength({ min: 6}),
-	body('first_name').isString().bail().isLength({ min: 3}),
-	body('last_name').isString().bail().isLength({ min: 3}),
+	body('password').trim().isString().bail().isLength({ min: 6}),
+	body('first_name').trim().isString().bail().isLength({ min: 3}),
+	body('last_name').trim().isString().bail().isLength({ min: 3}),
 ]

@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: albums,
 		})
@@ -34,7 +34,7 @@ export const index = async (req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
 	const albumId = Number(req.params.albumId)
 	try {
-		const album = await prisma.album.findFirst({
+		const album = await prisma.album.findFirstOrThrow({
 			where: {
 			  id: albumId,
 			  user_id: req.user.sub
@@ -43,7 +43,7 @@ export const show = async (req: Request, res: Response) => {
 				photos: true,
 			}
 		  })
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: album,
 		})
@@ -71,7 +71,7 @@ export const store = async (req: Request, res: Response) => {
 			title: req.body.title,
 			user_id: req.user.sub,
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: album,
 		})
@@ -98,7 +98,7 @@ export const update = async (req: Request, res: Response) => {
 		  title: req.body.title,
 		}
 	  })
-	  res.send({
+	  res.status(200).send({
 		status: "success",
 		data: updateAlbum,
 	})
@@ -129,7 +129,7 @@ export const addPhoto = async (req: Request, res: Response) => {
 			}
 		})
 
-		res.send({
+		res.status(200).send({
 			"status": "success",
 			"data": null
 		  })

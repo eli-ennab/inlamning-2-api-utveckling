@@ -8,6 +8,7 @@ import prisma from '../prisma'
 import { index, show, store, update, addPhoto } from '../controllers/album_controller'
 const router = express.Router()
 import Debug from 'debug'
+import { createAlbumRules } from '../validations/album_rules'
 
 const debug = Debug('albums:albums')
 
@@ -31,9 +32,7 @@ router.get('/:albumId', show)
  * POST /albums
  * Create a new album
  */
-router.post('/', [
-	body('title').isString().withMessage('has to be a string').bail().isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
-], store)
+router.post('/', createAlbumRules, store)
 
 /**
  * PATCH /albums/:albumId
@@ -45,7 +44,6 @@ router.patch('/:albumId', [], update)
  * POST /albums/:albumId/photos
  * Add a photo to an album
  */
-// router.post('/:albumId/photos', [], addPhoto)
 router.post('/:albumId/photos', addPhoto)
 
 /**
