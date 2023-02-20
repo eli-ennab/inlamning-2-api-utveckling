@@ -3,7 +3,7 @@
  */
 import express from 'express'
 import { body } from 'express-validator'
-import { index, show, store, update} from '../controllers/photo_controller'
+import { index, show, store, update, destroy} from '../controllers/photo_controller'
 import { createPhotoRules, updatePhotoRules } from '../validations/photo_rules'
 const router = express.Router()
 
@@ -43,6 +43,6 @@ router.patch('/:photoId', updatePhotoRules, update)
  * DELETE /photos/:photoId
  * Delete a photo
  */
-// router.delete('/:photoId', destroy)
+router.delete('/:photoId', destroy)
 
 export default router

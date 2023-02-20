@@ -127,3 +127,36 @@ export const update = async (req: Request, res: Response) => {
 		res.status(500).send({ status: "error", message: "Cannot update photo" })
 	}
 }
+
+/**
+ * Delete a photo
+ */
+export const destroy = async (req: Request, res: Response) => {
+
+	try {
+		const photo = await prisma.photo.findFirstOrThrow({
+			where: {
+				id: Number(req.params.photoId),
+				user_id: req.user.sub
+			  }
+		})
+	} catch (err) {
+		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+	}
+
+	try {
+		const deletePhoto = await prisma.photo.delete({
+			where: {
+				id: Number(req.params.photoId),
+			}
+		})
+
+		res.status(200).send({
+			"status": "success",
+			"data": null
+		  })
+	} catch (err) {
+		debug("Error thrown when deleting photo %o and the links to the photos: %o", req.params.photoId, err);
+		res.status(500).send({ message: "Something went wrong" });
+	}
+}
