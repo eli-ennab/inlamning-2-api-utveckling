@@ -14,7 +14,3 @@ export const updateAlbumRules = [
 export const addPhotosToAlbumRules = [
 	body('photo_id').notEmpty().withMessage('has to contain at least one int').isArray().withMessage('has to be an array'),
 ]
-
-export const removePhotoFromAlbumRules = [
-
-]
