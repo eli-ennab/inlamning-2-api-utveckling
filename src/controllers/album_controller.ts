@@ -58,6 +58,7 @@ export const show = async (req: Request, res: Response) => {
  * Create an album
  */
 export const store = async (req: Request, res: Response) => {
+	
 	const validatonErrors = validationResult(req)
 	if(!validatonErrors.isEmpty()) {
 		return res.status(400).send({
@@ -99,6 +100,17 @@ export const update = async (req: Request, res: Response) => {
 	debug("All I sent was this lousy: %o", albumId)
 
 	try {
+		const album = await prisma.album.findFirstOrThrow({
+			where: {
+				id: albumId,
+				user_id: req.user.sub
+			  }
+		})
+	} catch (err) {
+		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+	}
+
+	try {
 	const updateAlbum = await prisma.album.update({
 		where: {
 		  id: albumId,
@@ -128,6 +140,18 @@ export const addPhoto = async (req: Request, res: Response) => {
 			status: "fail",
 			data: validatonErrors.array(),
 		})
+	}
+
+	try {
+		const album = await prisma.album.findFirstOrThrow({
+			where: {
+				id: Number(req.params.albumId),
+				user_id: req.user.sub
+			  }
+		})
+
+	} catch (err) {
+		return res.status(401).send({ status: "fail", message: "You are not authorized" })
 	}
 	
 	try {
@@ -169,7 +193,7 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 			include: {
 				photos: true,
 			},
-		});
+		})
 
 		res.status(200).send({
 			"status": "success",
