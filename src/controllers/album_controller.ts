@@ -85,6 +85,15 @@ export const store = async (req: Request, res: Response) => {
  * Update an album
  */
 export const update = async (req: Request, res: Response) => {
+
+	const validatonErrors = validationResult(req)
+	if(!validatonErrors.isEmpty()) {
+		return res.status(400).send({
+			status: "fail",
+			data: validatonErrors.array(),
+		})
+	}
+
 	const albumId = Number(req.params.albumId)
 
 	debug("All I sent was this lousy: %o", albumId)
@@ -112,6 +121,15 @@ export const update = async (req: Request, res: Response) => {
  * Add a photo to album
  */
 export const addPhoto = async (req: Request, res: Response) => {
+
+	const validatonErrors = validationResult(req)
+	if(!validatonErrors.isEmpty()) {
+		return res.status(400).send({
+			status: "fail",
+			data: validatonErrors.array(),
+		})
+	}
+	
 	try {
 		const result = await prisma.album.update({
 			where: {
@@ -153,9 +171,12 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 			},
 		});
 
-		res.send(deletedAlbum);
+		res.status(200).send({
+			"status": "success",
+			"data": null
+		  })
 	} catch (err) {
 		debug("Error thrown when deleting album %o and the links to the photos: %o", req.params.albumId, err);
 		res.status(500).send({ message: "Something went wrong" });
 	}
-};
+}

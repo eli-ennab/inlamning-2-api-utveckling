@@ -8,7 +8,7 @@ import prisma from '../prisma'
 import { index, show, store, update, addPhoto, deleteAlbum } from '../controllers/album_controller'
 const router = express.Router()
 import Debug from 'debug'
-import { createAlbumRules } from '../validations/album_rules'
+import { createAlbumRules, updateAlbumRules } from '../validations/album_rules'
 
 const debug = Debug('albums:albums')
 

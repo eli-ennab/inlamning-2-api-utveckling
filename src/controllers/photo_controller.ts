@@ -53,6 +53,7 @@ export const show = async (req: Request, res: Response) => {
  * Create an photo
  */
 export const store = async (req: Request, res: Response) => {
+	
 	const validatonErrors = validationResult(req)
 	if(!validatonErrors.isEmpty()) {
 		return res.status(400).send({
@@ -82,6 +83,15 @@ export const store = async (req: Request, res: Response) => {
  * Update a photo
  */
 export const update = async (req: Request, res: Response) => {
+
+	const validatonErrors = validationResult(req)
+	if(!validatonErrors.isEmpty()) {
+		return res.status(400).send({
+			status: "fail",
+			data: validatonErrors.array(),
+		})
+	}
+
 	const photoId = Number(req.params.photoId)
 
 	debug("All I sent was this lousy: %o", photoId)
