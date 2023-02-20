@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photos,
 		})
@@ -34,13 +34,13 @@ export const index = async (req: Request, res: Response) => {
 export const show = async (req: Request, res: Response) => {
 	const photoId = Number(req.params.photoId)
 	try {
-		const photo = await prisma.photo.findFirst({
+		const photo = await prisma.photo.findFirstOrThrow({
 			where: {
 			  id: photoId,
 			  user_id: req.user.sub
 			}
 		  })
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photo,
 		})
@@ -68,12 +68,41 @@ export const store = async (req: Request, res: Response) => {
 			comment: req.body?.comment,
 			user_id: req.user.sub,
 		})
-		res.send({
+		res.status(200).send({
 			status: "success",
 			data: photo,
 		})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
 		res.status(500).send({ status: "error", message: "Cannot create photo" })
+	}
+}
+
+/**
+ * Update a photo
+ */
+export const update = async (req: Request, res: Response) => {
+	const photoId = Number(req.params.photoId)
+
+	debug("All I sent was this lousy: %o", photoId)
+
+	try {
+	const updatePhoto = await prisma.photo.update({
+		where: {
+		  id: photoId,
+		},
+		data: {
+			title: req.body.title,
+			url: req.body.url,
+			comment: req.body?.comment,
+		}
+	  })
+	  res.status(200).send({
+		status: "success",
+		data: updatePhoto,
+	})
+	} catch (err) {
+		debug("All I got was this lousy: %o", err)
+		res.status(500).send({ status: "error", message: "Cannot update photo" })
 	}
 }

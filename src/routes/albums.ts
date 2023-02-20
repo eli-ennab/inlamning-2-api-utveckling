@@ -44,7 +44,6 @@ router.patch('/:albumId', createAlbumRules, update)
  * POST /albums/:albumId/photos
  * Add a photo to an album
  */
-// router.post('/:albumId/photos', [], addPhoto)
 router.post('/:albumId/photos', addPhoto)
 
 /**
