@@ -239,6 +239,27 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
  * Delete an album (and the links to the album's photos, but not the photos themselves)
  */
 export const deleteAlbum = async (req: Request, res: Response) => {
+
+	const validatonErrors = validationResult(req)
+	if(!validatonErrors.isEmpty()) {
+		return res.status(400).send({
+			status: "fail",
+			data: validatonErrors.array(),
+		})
+	}
+
+	try {
+		const album = await prisma.album.findFirstOrThrow({
+			where: {
+				id: Number(req.params.albumId),
+				user_id: req.user.sub
+			  }
+		})
+
+	} catch (err) {
+		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+	}
+	
 	try {
 		const deletedAlbum = await prisma.album.delete({
 			where: {
