@@ -1,12 +1,9 @@
-/**
- * User controller
- */
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import { Request, Response } from 'express'
 import { matchedData, validationResult } from 'express-validator'
 import { createUser, getUserByEmail } from '../services/user_services'
 import { JwtPayload } from '../types'
-import jwt from 'jsonwebtoken'
 
 /**
  * Login a user
@@ -68,6 +65,7 @@ export const login = async (req: Request, res: Response) => {
  * Register a new user
  */
 export const register = async (req: Request, res: Response) => {
+
     const validationErrors = validationResult(req)
     if (!validationErrors.isEmpty()) {
         return res.status(400).send({
@@ -112,6 +110,7 @@ export const register = async (req: Request, res: Response) => {
  * Refresh token
  */
 export const refresh = (req: Request, res: Response) => {
+
 	if (!req.headers.authorization) {
 		return res.status(401).send({
 			status: "fail",

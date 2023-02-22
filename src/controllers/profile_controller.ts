@@ -1,6 +1,3 @@
-/**
- * Profile Controller
- */
 import { Request, Response } from 'express'
 
 /**

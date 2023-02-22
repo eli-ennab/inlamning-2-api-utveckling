@@ -1,6 +1,3 @@
-/**
- * Validation rules for Album
- */
 import { body } from 'express-validator'
 
 export const createAlbumRules = [

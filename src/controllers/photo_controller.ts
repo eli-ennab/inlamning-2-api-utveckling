@@ -1,6 +1,3 @@
-/**
- * Albums controller
- */
 import Debug from 'debug'
 import prisma from '../prisma'
 import { Request, Response } from 'express'
@@ -24,7 +21,7 @@ export const index = async (req: Request, res: Response) => {
 			data: photos,
 		})
 	} catch (err) {
-		res.status(500).send({ status: "error", message: "Something went wrong" })
+		res.status(500).send({ status: "error", message: "Something went wrong getting photos" })
 	}
 }
 
@@ -45,7 +42,7 @@ export const show = async (req: Request, res: Response) => {
 			data: photo,
 		})
 	} catch (err) {
-		return res.status(404).send({ status: "error", message: "Not found" })
+		return res.status(404).send({ status: "error", message: "You have no photo with that ID" })
 	}
 }
 
@@ -75,7 +72,7 @@ export const store = async (req: Request, res: Response) => {
 		})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Cannot create photo" })
+		res.status(500).send({ status: "error", message: "Something went wrong creating photo" })
 	}
 }
 
@@ -97,7 +94,7 @@ export const update = async (req: Request, res: Response) => {
 	debug("All I sent was this lousy: %o", photoId)
 
 	try {
-		const photo = await prisma.photo.findFirstOrThrow({
+		await prisma.photo.findFirstOrThrow({
 			where: {
 				id: photoId,
 				user_id: req.user.sub
@@ -124,7 +121,7 @@ export const update = async (req: Request, res: Response) => {
 		})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Cannot update photo" })
+		res.status(500).send({ status: "error", message: "Something went wrong updating photo" })
 	}
 }
 
@@ -134,7 +131,7 @@ export const update = async (req: Request, res: Response) => {
 export const destroy = async (req: Request, res: Response) => {
 
 	try {
-		const photo = await prisma.photo.findFirstOrThrow({
+		await prisma.photo.findFirstOrThrow({
 			where: {
 				id: Number(req.params.photoId),
 				user_id: req.user.sub
@@ -145,7 +142,7 @@ export const destroy = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const deletePhoto = await prisma.photo.delete({
+		await prisma.photo.delete({
 			where: {
 				id: Number(req.params.photoId),
 			}
@@ -157,6 +154,6 @@ export const destroy = async (req: Request, res: Response) => {
 		  })
 	} catch (err) {
 		debug("Error thrown when deleting photo %o and the links to the photos: %o", req.params.photoId, err);
-		res.status(500).send({ message: "Something went wrong" });
+		res.status(500).send({ message: "Something went wrong deleting photo and the photo's links" });
 	}
 }

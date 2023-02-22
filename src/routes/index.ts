@@ -1,7 +1,7 @@
 import albums from './albums'
 import express from "express"
-import profile from "./profile"
 import photos from './photos'
+import profile from "./profile"
 import { login, refresh, register } from "../controllers/user_controller"
 import { createLoginRules, createUserRules } from "../validations/user_rules"
 import { jwtAuth } from "../middlewares/auth/jwt"

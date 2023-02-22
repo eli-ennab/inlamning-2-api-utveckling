@@ -1,6 +1,3 @@
-/**
- * Validation rules for Photo
- */
 import { body } from 'express-validator'
 
 export const createPhotoRules = [

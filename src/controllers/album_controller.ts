@@ -1,6 +1,3 @@
-/**
- * Albums controller
- */
 import Debug from 'debug'
 import prisma from '../prisma'
 import { Request, Response } from 'express'
@@ -24,7 +21,7 @@ export const index = async (req: Request, res: Response) => {
 			data: albums,
 		})
 	} catch (err) {
-		res.status(500).send({ status: "error", message: "Something went wrong" })
+		res.status(500).send({ status: "error", message: "Something went wrong getting albums" })
 	}
 }
 
@@ -54,7 +51,7 @@ export const show = async (req: Request, res: Response) => {
 		debug("Result", album)
 	} catch (err) {
 		debug("Error", err)
-		return res.status(404).send({ status: "error", message: "You have no album with that ID." })
+		return res.status(404).send({ status: "error", message: "You have no album with that ID" })
 	}
 }
 
@@ -82,7 +79,7 @@ export const store = async (req: Request, res: Response) => {
 		})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Cannot create album" })
+		res.status(500).send({ status: "error", message: "Something went wrong creating album" })
 	}
 }
 
@@ -104,7 +101,7 @@ export const update = async (req: Request, res: Response) => {
 	debug("All I sent was this lousy: %o", albumId)
 
 	try {
-		const album = await prisma.album.findFirstOrThrow({
+		await prisma.album.findFirstOrThrow({
 			where: {
 				id: albumId,
 				user_id: req.user.sub
@@ -129,7 +126,7 @@ export const update = async (req: Request, res: Response) => {
 	})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Cannot update album" })
+		res.status(500).send({ status: "error", message: "Something went wrong updating the album" })
 	}
 }
 
@@ -147,7 +144,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const album = await prisma.album.findFirstOrThrow({
+		await prisma.album.findFirstOrThrow({
 			where: {
 				id: Number(req.params.albumId),
 				user_id: req.user.sub
@@ -161,7 +158,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 	try {
 		const photoIds = req.body.photo_id
 
-		const result = await prisma.album.update({
+		await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
@@ -181,7 +178,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 		  })
 	} catch (err) {
 		debug("Error thrown when adding photos %o to an album %o: %o", req.params.albumId, err)
-		res.status(500).send({ message: "Something went wrong" })
+		res.status(500).send({ message: "Something went wrong adding photo to album" })
 	}
 }
 
@@ -199,7 +196,7 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const album = await prisma.album.findFirstOrThrow({
+		await prisma.album.findFirstOrThrow({
 			where: {
 				id: Number(req.params.albumId),
 				user_id: req.user.sub
@@ -211,7 +208,7 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 	}
 	
 	try {
-		const result = await prisma.album.update({
+		await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
@@ -231,7 +228,7 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 
 	} catch (err) {
 		debug("Error thrown when removing photo %o from album %o: %o", req.body.photoId, req.params.albumId, err)
-		res.status(500).send({ message: "Something went wrong" })
+		res.status(500).send({ message: "Something went wrong removing photo from album" })
 	}
 }
 
@@ -249,7 +246,7 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 	}
 
 	try {
-		const album = await prisma.album.findFirstOrThrow({
+		await prisma.album.findFirstOrThrow({
 			where: {
 				id: Number(req.params.albumId),
 				user_id: req.user.sub
@@ -261,7 +258,7 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 	}
 	
 	try {
-		const deletedAlbum = await prisma.album.delete({
+		await prisma.album.delete({
 			where: {
 				id: Number(req.params.albumId),
 			},
@@ -276,6 +273,6 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 		  })
 	} catch (err) {
 		debug("Error thrown when deleting album %o and the links to the photos: %o", req.params.albumId, err);
-		res.status(500).send({ message: "Something went wrong" });
+		res.status(500).send({ message: "Something went wrong deleting album and the album's links" });
 	}
 }
