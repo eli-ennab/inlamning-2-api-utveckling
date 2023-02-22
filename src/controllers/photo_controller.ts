@@ -49,7 +49,7 @@ export const show = async (req: Request, res: Response) => {
 	} catch (err) {
 		return res.status(404).send({ 
 			status: "fail", 
-			message: "You have no photo with that ID" 
+			message: `You have no photo with id ${photoId}`
 		})
 	}
 }
