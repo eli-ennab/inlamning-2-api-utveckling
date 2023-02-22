@@ -153,7 +153,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 		data: validationErrors.array(),
 	  })
 	}
-
+  
 	const albumId = Number(req.params.albumId)
   
 	try {
@@ -180,13 +180,30 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 		})
 	  }
   
+	  const photoIds = req.body.photo_id
+	  const photos = await prisma.photo.findMany({
+		where: {
+		  id: {
+			in: photoIds,
+		  },
+		  user_id: req.user.sub,
+		},
+	  })
+  
+	  if (photos.length !== photoIds.length) {
+		return res.status(401).send({
+		  status: "fail",
+		  message: "You are not authorized to add one or more of the photos",
+		})
+	  }
+  
 	  await prisma.album.update({
 		where: {
 		  id: albumId,
 		},
 		data: {
 		  photos: {
-			connect: req.body.photo_id.map((id: number) => ({ id })),
+			connect: photoIds.map((id: number) => ({ id })),
 		  },
 		},
 	  })
@@ -202,7 +219,8 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 		message: "Something went wrong adding photo to album",
 	  })
 	}
- }
+  }
+  
   
 
 /**
