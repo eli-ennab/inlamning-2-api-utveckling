@@ -8,21 +8,21 @@ export const createUserRules = [
 			const user = await getUserByEmail(value)
 
 			if (user) {
-				return Promise.reject("Email already exists")
+				return Promise.reject("email is already registered")
 			}
 		}),
 	body('password')
 		.trim()
 		.isString()
-		.isLength({ min: 6}).withMessage('has to at least 6 chars long'),
+		.isLength({ min: 6 }).withMessage('has to at least 6 chars long'),
 	body('first_name')
 		.trim()
 		.isString()
-		.isLength({ min: 3}).withMessage('has to at least 3 chars long'),
+		.isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
 	body('last_name')
 		.trim()
 		.isString()
-		.isLength({ min: 3}).withMessage('has to at least 3 chars long'),
+		.isLength({ min: 3 }).withMessage('has to at least 3 chars long'),
 ]
 
 export const createLoginRules = [
@@ -32,7 +32,7 @@ export const createLoginRules = [
 			const user = await getUserByEmail(value)
 
 			if (user) {
-				return Promise.reject("Email already exists")
+				return Promise.reject("email must exist")
 			}
 		}),
 	body('password')

@@ -167,7 +167,7 @@ export const destroy = async (req: Request, res: Response) => {
 		res.status(200).send({
 			status: "success",
 			data: null
-		  })
+		})
 	} catch (err) {
 		res.status(500).send({ 
 			status: "error", 
