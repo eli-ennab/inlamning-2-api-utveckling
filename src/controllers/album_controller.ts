@@ -219,9 +219,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 		message: "Something went wrong adding photo to album",
 	  })
 	}
-  }
-  
-  
+}
 
 /**
  * Remove photo from album
@@ -301,7 +299,10 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 			  }
 		})
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 	
 	try {

@@ -44,7 +44,12 @@ export const show = async (req: Request, res: Response) => {
 		  })
 		res.status(200).send({
 			status: "success",
-			data: photo,
+			data: {
+				id: photo.id,
+				title: photo.title,
+				url: photo.url,
+				comment: photo.comment
+			},
 		})
 	} catch (err) {
 		return res.status(404).send({ 
