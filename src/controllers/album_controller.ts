@@ -182,12 +182,11 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 			},
 		})
 
-		if (req.body.id !== req.user.sub) {
+		if (req.body.id !== req.user.sub)
 			return res.status(401).send({ 
 				status: "fail", 
 				message: "You are not authorized" 
 			})
-		}
 
 		res.status(200).send({
 			status: "success",
