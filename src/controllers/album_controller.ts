@@ -32,7 +32,9 @@ export const index = async (req: Request, res: Response) => {
  * Get a single album
  */
 export const show = async (req: Request, res: Response) => {
+
 	const albumId = Number(req.params.albumId)
+
 	try {
 		const album = await prisma.album.findFirstOrThrow({
 			where: {
@@ -51,9 +53,7 @@ export const show = async (req: Request, res: Response) => {
 				photos: album.photos
 			},
 		})
-		debug("Result", album)
 	} catch (err) {
-		debug("Error", err)
 		return res.status(404).send({ 
 			status: "fail", 
 			message: "You have no album with that ID" 
@@ -84,7 +84,6 @@ export const store = async (req: Request, res: Response) => {
 			data: album,
 		})
 	} catch (err) {
-		debug("All I got was this lousy: %o", err)
 		res.status(500).send({ 
 			status: "error", 
 			message: "Something went wrong creating album" 
@@ -107,8 +106,6 @@ export const update = async (req: Request, res: Response) => {
 
 	const albumId = Number(req.params.albumId)
 
-	debug("All I sent was this lousy: %o", albumId)
-
 	try {
 		await prisma.album.findFirstOrThrow({
 			where: {
@@ -124,20 +121,19 @@ export const update = async (req: Request, res: Response) => {
 	}
 
 	try {
-	const updateAlbum = await prisma.album.update({
-		where: {
-		  id: albumId,
-		},
-		data: {
-		  title: req.body.title,
-		}
-	  })
-	  res.status(200).send({
-		status: "success",
-		data: updateAlbum,
-	})
+		const updateAlbum = await prisma.album.update({
+			where: {
+			id: albumId,
+			},
+			data: {
+			title: req.body.title,
+			}
+		})
+		res.status(200).send({
+			status: "success",
+			data: updateAlbum,
+		})
 	} catch (err) {
-		debug("All I got was this lousy: %o", err)
 		res.status(500).send({ 
 			status: "error", 
 			message: "Something went wrong updating the album" 
@@ -175,7 +171,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 	try {
 		const photoIds = req.body.photo_id
 
-		const result = await prisma.album.update({
+		await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
@@ -197,9 +193,7 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 			status: "success",
 			data: null
 		  })
-		  debug("Result:", result)
 	} catch (err) {
-		debug("Error thrown when adding photos %o to an album %o: %o", req.params.albumId, err)
 		res.status(500).send({ 
 			status: "error",
 			message: "Something went wrong adding photo to album" 
@@ -228,7 +222,6 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-
 	} catch (err) {
 		return res.status(401).send({ 
 			status: "fail", 
@@ -251,12 +244,10 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 		})
 
 		res.status(200).send({
-			"status": "success",
-			"data": null,
+			status: "success",
+			data: null,
 		  })
-
 	} catch (err) {
-		debug("Error thrown when removing photo %o from album %o: %o", req.body.photoId, req.params.albumId, err)
 		res.status(500).send({ 
 			status: "error",
 			message: "Something went wrong removing photo from album" 
@@ -284,7 +275,6 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-
 	} catch (err) {
 		return res.status(401).send({ status: "fail", message: "You are not authorized" })
 	}
@@ -300,11 +290,13 @@ export const deleteAlbum = async (req: Request, res: Response) => {
 		})
 
 		res.status(200).send({
-			"status": "success",
-			"data": null
+			status: "success",
+			data: null
 		  })
 	} catch (err) {
-		debug("Error thrown when deleting album %o and the links to the photos: %o", req.params.albumId, err);
-		res.status(500).send({ message: "Something went wrong deleting album and the album's links" });
+		res.status(500).send({ 
+			status: "error",
+			message: "Something went wrong deleting album and the album's links" 
+		})
 	}
 }

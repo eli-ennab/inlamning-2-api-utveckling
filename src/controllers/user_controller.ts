@@ -9,9 +9,10 @@ import { JwtPayload } from '../types'
  * Login a user
  */
 export const login = async (req: Request, res: Response) => {
-	const { email, password } = req.body
 
+	const { email, password } = req.body
 	const user = await getUserByEmail(email)
+
 	if (!user) {
 		return res.status(401).send({
 			status: "fail",
@@ -20,6 +21,7 @@ export const login = async (req: Request, res: Response) => {
 	}
 
 	const result = await bcrypt.compare(password, user.password)
+
 	if (!result) {
 		return res.status(401).send({
 			status: "fail",
@@ -38,6 +40,7 @@ export const login = async (req: Request, res: Response) => {
             message: "No access token secret defined",
         })
     }
+
 	const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
 		expiresIn: process.env.ACCESS_TOKEN_LIFETIME || '4h',
 	})
@@ -48,6 +51,7 @@ export const login = async (req: Request, res: Response) => {
             message: "No refresh token secret defined",
         })
     }
+
 	const refresh_token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
 		expiresIn: process.env.REFRESH_TOKEN_LIFETIME || '1d',
 	})
@@ -75,7 +79,6 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const validatedData = matchedData(req)
-    console.log("Validated data:", validatedData)
 
     const hashedPassword = 
         await bcrypt.hash(validatedData.password, Number(process.env.SALT_ROUNDS) || 10)
@@ -101,7 +104,8 @@ export const register = async (req: Request, res: Response) => {
         })
     } catch (err) {
 		return res.status(500).send({ 
-            status: "error", message: "Could not create user" 
+            status: "error", 
+			message: "Could not create user" 
         })
     }
 }
@@ -128,6 +132,7 @@ export const refresh = (req: Request, res: Response) => {
 	}
 
 	try {
+
 		const { sub, email } = (jwt.verify(token, process.env.REFRESH_TOKEN_SECRET || "") as unknown) as JwtPayload
 
         const payload: JwtPayload = {
@@ -141,6 +146,7 @@ export const refresh = (req: Request, res: Response) => {
 				message: "No access token secret defined",
 			})
 		}
+
 		const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
 			expiresIn: process.env.ACCESS_TOKEN_LIFETIME || '4h',
 		})
@@ -151,6 +157,7 @@ export const refresh = (req: Request, res: Response) => {
 				access_token,
 			},
 		})
+		
 	} catch (err) {
 		return res.status(401).send({
 			status: "fail",

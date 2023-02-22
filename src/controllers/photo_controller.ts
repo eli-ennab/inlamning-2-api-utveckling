@@ -21,7 +21,10 @@ export const index = async (req: Request, res: Response) => {
 			data: photos,
 		})
 	} catch (err) {
-		res.status(500).send({ status: "error", message: "Something went wrong getting photos" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong getting photos" 
+		})
 	}
 }
 
@@ -29,7 +32,9 @@ export const index = async (req: Request, res: Response) => {
  * Get a single photo
  */
 export const show = async (req: Request, res: Response) => {
+
 	const photoId = Number(req.params.photoId)
+	
 	try {
 		const photo = await prisma.photo.findFirstOrThrow({
 			where: {
@@ -42,7 +47,10 @@ export const show = async (req: Request, res: Response) => {
 			data: photo,
 		})
 	} catch (err) {
-		return res.status(404).send({ status: "error", message: "You have no photo with that ID" })
+		return res.status(404).send({ 
+			status: "fail", 
+			message: "You have no photo with that ID" 
+		})
 	}
 }
 
@@ -71,8 +79,10 @@ export const store = async (req: Request, res: Response) => {
 			data: photo,
 		})
 	} catch (err) {
-		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Something went wrong creating photo" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong creating photo" 
+		})
 	}
 }
 
@@ -91,8 +101,6 @@ export const update = async (req: Request, res: Response) => {
 
 	const photoId = Number(req.params.photoId)
 
-	debug("All I sent was this lousy: %o", photoId)
-
 	try {
 		await prisma.photo.findFirstOrThrow({
 			where: {
@@ -101,13 +109,16 @@ export const update = async (req: Request, res: Response) => {
 			  }
 		})
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 
 	try {
 		const updatePhoto = await prisma.photo.update({
 			where: {
-			id: photoId,
+				id: photoId,
 			},
 			data: {
 				title: req.body.title,
@@ -120,8 +131,10 @@ export const update = async (req: Request, res: Response) => {
 			data: updatePhoto,
 		})
 	} catch (err) {
-		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Something went wrong updating photo" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong updating photo" 
+		})
 	}
 }
 
@@ -138,7 +151,10 @@ export const destroy = async (req: Request, res: Response) => {
 			  }
 		})
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 
 	try {
@@ -149,11 +165,13 @@ export const destroy = async (req: Request, res: Response) => {
 		})
 
 		res.status(200).send({
-			"status": "success",
-			"data": null
+			status: "success",
+			data: null
 		  })
 	} catch (err) {
-		debug("Error thrown when deleting photo %o and the links to the photos: %o", req.params.photoId, err);
-		res.status(500).send({ message: "Something went wrong deleting photo and the photo's links" });
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong deleting photo and the photo's links" 
+		});
 	}
 }
