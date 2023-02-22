@@ -21,7 +21,10 @@ export const index = async (req: Request, res: Response) => {
 			data: albums,
 		})
 	} catch (err) {
-		res.status(500).send({ status: "error", message: "Something went wrong getting albums" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong getting albums" 
+		})
 	}
 }
 
@@ -51,7 +54,10 @@ export const show = async (req: Request, res: Response) => {
 		debug("Result", album)
 	} catch (err) {
 		debug("Error", err)
-		return res.status(404).send({ status: "error", message: "You have no album with that ID" })
+		return res.status(404).send({ 
+			status: "fail", 
+			message: "You have no album with that ID" 
+		})
 	}
 }
 
@@ -79,7 +85,10 @@ export const store = async (req: Request, res: Response) => {
 		})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Something went wrong creating album" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong creating album" 
+		})
 	}
 }
 
@@ -108,7 +117,10 @@ export const update = async (req: Request, res: Response) => {
 			  }
 		})
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 
 	try {
@@ -126,7 +138,10 @@ export const update = async (req: Request, res: Response) => {
 	})
 	} catch (err) {
 		debug("All I got was this lousy: %o", err)
-		res.status(500).send({ status: "error", message: "Something went wrong updating the album" })
+		res.status(500).send({ 
+			status: "error", 
+			message: "Something went wrong updating the album" 
+		})
 	}
 }
 
@@ -150,15 +165,17 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 				user_id: req.user.sub
 			  }
 		})
-
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 	
 	try {
 		const photoIds = req.body.photo_id
 
-		await prisma.album.update({
+		const result = await prisma.album.update({
 			where: {
 				id: Number(req.params.albumId),
 			},
@@ -167,20 +184,29 @@ export const addPhotosToAlbum = async (req: Request, res: Response) => {
 					connect: photoIds.map((id: Number) => ({ id })),
 				},
 			},
-			include: {
-				photos: true,
-			}
 		})
 
+		if (req.body.id !== req.user.sub) {
+			return res.status(401).send({ 
+				status: "fail", 
+				message: "You are not authorized" 
+			})
+		}
+
 		res.status(200).send({
-			"status": "success",
-			"data": null
+			status: "success",
+			data: null
 		  })
+		  debug("Result:", result)
 	} catch (err) {
 		debug("Error thrown when adding photos %o to an album %o: %o", req.params.albumId, err)
-		res.status(500).send({ message: "Something went wrong adding photo to album" })
+		res.status(500).send({ 
+			status: "error",
+			message: "Something went wrong adding photo to album" 
+		})
 	}
 }
+
 
 /**
  * Remove photo from album
@@ -204,7 +230,10 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 		})
 
 	} catch (err) {
-		return res.status(401).send({ status: "fail", message: "You are not authorized" })
+		return res.status(401).send({ 
+			status: "fail", 
+			message: "You are not authorized" 
+		})
 	}
 	
 	try {
@@ -228,7 +257,10 @@ export const removePhotoFromAlbum = async (req: Request, res: Response) => {
 
 	} catch (err) {
 		debug("Error thrown when removing photo %o from album %o: %o", req.body.photoId, req.params.albumId, err)
-		res.status(500).send({ message: "Something went wrong removing photo from album" })
+		res.status(500).send({ 
+			status: "error",
+			message: "Something went wrong removing photo from album" 
+		})
 	}
 }
 
