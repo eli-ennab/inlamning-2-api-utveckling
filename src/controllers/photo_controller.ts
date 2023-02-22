@@ -143,10 +143,12 @@ export const update = async (req: Request, res: Response) => {
  */
 export const destroy = async (req: Request, res: Response) => {
 
+	const photoId = Number(req.params.photoId)
+
 	try {
 		await prisma.photo.findFirstOrThrow({
 			where: {
-				id: Number(req.params.photoId),
+				id: photoId,
 				user_id: req.user.sub
 			  }
 		})
@@ -160,7 +162,7 @@ export const destroy = async (req: Request, res: Response) => {
 	try {
 		await prisma.photo.delete({
 			where: {
-				id: Number(req.params.photoId),
+				id: photoId,
 			}
 		})
 
